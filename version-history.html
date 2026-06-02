@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>版本历史 - 我的提示词管理器</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f7fb;padding:30px 20px;color:#1e293b;}
+    .container{max-width:1000px;margin:0 auto;}
+    h1{font-size:24px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+    h1 small{font-size:13px;font-weight:normal;color:#5b6e8c;}
+    .back-btn{position:fixed;top:20px;right:20px;padding:8px 16px;background:#fff;border:1px solid #cbd5e1;border-radius:20px;cursor:pointer;font-size:13px;}
+    .back-btn:hover{background:#eef2ff;}
+    hr{margin:20px 0;border:none;border-top:1px solid #e2e8f0;}
+    .prompt-group{background:white;border-radius:20px;margin-bottom:32px;box-shadow:0 1px 3px rgba(0,0,0,0.05);overflow:hidden;}
+    .group-header{padding:16px 20px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
+    .group-header h2{font-size:18px;font-weight:600;color:#0f172a;}
+    .version-badge{background:#e2e8f0;border-radius:30px;padding:2px 10px;font-size:12px;color:#334155;}
+    .timeline{padding:20px 20px 20px 60px;position:relative;}
+    .timeline::before{content:'';position:absolute;left:30px;top:20px;bottom:20px;width:2px;background:#cbd5e1;}
+    .version-card{position:relative;margin-bottom:24px;padding-left:20px;}
+    .version-card::before{content:'';position:absolute;left:-36px;top:12px;width:14px;height:14px;border-radius:50%;background:#94a3b8;border:2px solid white;box-shadow:0 0 0 2px #cbd5e1;z-index:1;}
+    .version-card.current::before{background:#10b981;box-shadow:0 0 0 2px #10b981;}
+    .card{background:#ffffff;border:1px solid #e2e8f0;border-radius:16px;padding:14px 16px;transition:0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.02);}
+    .version-card.current .card{border-left:4px solid #10b981;background:#f0fdf4;}
+    .card-header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+    .version-num{font-weight:700;font-size:15px;background:#f1f5f9;padding:2px 10px;border-radius:20px;color:#1e293b;}
+    .version-date{font-size:12px;color:#5b6e8c;}
+    .version-badge-current{background:#10b981;color:white;padding:2px 8px;border-radius:30px;font-size:11px;font-weight:500;}
+    .card-meta{font-size:11px;color:#5b6e8c;margin:4px 0;}
+    .card-content{font-size:13px;color:#334155;margin:8px 0;line-height:1.5;word-break:break-word;background:#f9fafb;padding:8px 10px;border-radius:10px;max-height:80px;overflow-y:auto;cursor:pointer;transition:max-height 0.3s;}
+    .card-content.expanded{max-height:500px;}
+    .card-remark{font-size:12px;color:#5b6e8c;margin-top:6px;font-style:italic;}
+    .card-actions{margin-top:12px;display:flex;gap:10px;justify-content:flex-end;}
+    .btn{padding:5px 12px;border-radius:20px;border:none;font-size:12px;cursor:pointer;transition:0.1s;}
+    .btn-primary{background:#3b82f6;color:white;}
+    .btn-primary:hover{background:#2563eb;}
+    .btn-danger{background:#fee2e2;color:#dc2626;}
+    .btn-danger:hover{background:#fecaca;}
+    .empty-tip{text-align:center;padding:60px 20px;color:#94a3b8;}
+    footer{text-align:center;margin-top:40px;font-size:12px;color:#94a3b8;}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>📚 版本历史 <small>按提示词分组，展示所有版本</small></h1>
+  <button class="back-btn" id="closeBtn">← 关闭</button>
+  <hr>
+  <div id="historyContainer"></div>
+  <footer>点击「恢复」可将所选版本设为当前使用版本，旧版本自动归档。</footer>
+</div>
+<script src="version-history.js"></script>
+</body>
+</html>

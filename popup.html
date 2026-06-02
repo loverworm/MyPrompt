@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>提示词管理器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: 13px;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body {
+      width: 600px;
+      height: 480px;          /* 固定高度作为 fallback，JS 会在 popup 模式下覆盖为实际视口高度 */
+      display: flex;
+    }
+
+    /* ========== 左侧导航栏 ========== */
+    .left-nav {
+      width: 150px;
+      background: #f5f7fa;
+      border-right: 1px solid #e8e8e8;
+      padding: 8px 4px;
+      margin-right: 4px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;   /* 左侧独立滚动 */
+      min-height: 0;
+    }
+    /* 左侧滚动条样式 */
+    .left-nav::-webkit-scrollbar {
+      width: 6px;
+    }
+    .left-nav::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+    .left-nav::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 3px;
+    }
+    .left-nav::-webkit-scrollbar-thumb:hover {
+      background: #aaa;
+    }
+
+    /* 底部信息区 */
+    .info-box {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid #d8dce5;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .info-row {
+      margin: 6px 0;
+      padding: 0 8px;
+    }
+    .info-label {
+      color: #606266;
+      font-size: 11px;
+    }
+    .info-value {
+      color: #1f2329;
+      font-size: 12px;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .info-row:first-child .info-value {
+      font-weight: 600;
+    }
+    .author-text {
+      color: #409eff;
+    }
+    .version-text {
+      color: #67c23a;
+    }
+    .date-text {
+      color: #909399;
+    }
+
+    /* 导航分组 */
+    .nav-group {
+      margin-bottom: 8px;
+    }
+    .group-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #666;
+      padding: 6px 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .group-title:hover {
+      background: #e8edf5;
+    }
+    .group-title .arrow {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+    .group-title.collapsed .arrow {
+      transform: rotate(-90deg);
+    }
+    .group-buttons {
+      display: flex;
+      flex-direction: column;
+      padding-left: 12px;
+    }
+    .group-buttons.collapsed {
+      display: none;
+    }
+    .nav-btn {
+      display: block;
+      width: 100%;
+      padding: 8px 6px;
+      margin: 2px 0;
+      border: none;
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-btn.active {
+      background: #409eff;
+      color: #fff;
+    }
+    .nav-btn.ver {
+      background: #f0f2f5;
+      color: #666;
+    }
+
+    /* ========== 右侧内容区 ========== */
+    .right-content {
+      flex: 1;
+      padding: 12px;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;   /* 父容器隐藏溢出，由内部列表滚动 */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 页面容器 */
+    .page {
+      display: none;
+    }
+    .page.show {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      /* height: 100%;  ← 已删除：与 flex:1 并存会导致 flex 高度计算冲突 */
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;   /* 页面本身不滚动，留给内部列表 */
+    }
+
+    /* 工具栏行（固定不收缩） */
+    .toolbar-row {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+    }
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .toolbar-divider {
+      width: 1px;
+      height: 20px;
+      background: #ddd;
+      margin: 0 4px;
+    }
+
+    /* 列表容器（唯一滚动区域） */
+    #listContainer,
+    #collectContainer,
+    #draftContainer,
+    #cateContainer,
+    #tagContainer {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      border-top: 1px solid #ddd;
+      padding-top: 8px;
+    }
+
+    /* 自定义滚动条（仅对列表容器生效） */
+    #listContainer::-webkit-scrollbar,
+    #collectContainer::-webkit-scrollbar,
+    #draftContainer::-webkit-scrollbar,
+    #cateContainer::-webkit-scrollbar,
+    #tagContainer::-webkit-scrollbar {
+      width: 8px;
+    }
+    #listContainer::-webkit-scrollbar-track,
+    #collectContainer::-webkit-scrollbar-track,
+    #draftContainer::-webkit-scrollbar-track,
+    #cateContainer::-webkit-scrollbar-track,
+    #tagContainer::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    #listContainer::-webkit-scrollbar-thumb,
+    #collectContainer::-webkit-scrollbar-thumb,
+    #draftContainer::-webkit-scrollbar-thumb,
+    #cateContainer::-webkit-scrollbar-thumb,
+    #tagContainer::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+    #listContainer::-webkit-scrollbar-thumb:hover,
+    #collectContainer::-webkit-scrollbar-thumb:hover,
+    #draftContainer::-webkit-scrollbar-thumb:hover,
+    #cateContainer::-webkit-scrollbar-thumb:hover,
+    #tagContainer::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* 以下为原有样式，无改动 */
+    input, select {
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .btn {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #f0f2f5;
+      transition: 0.1s;
+    }
+    .btn:hover {
+      background: #e0e6f0;
+    }
+    .primary {
+      background: #409eff;
+      color: #fff;
+    }
+    .primary:hover {
+      background: #3388ee;
+    }
+    .danger {
+      background: #f56c6c;
+      color: #fff;
+    }
+    .danger:hover {
+      background: #dd5555;
+    }
+    .warning {
+      background: #e6a23c;
+      color: #fff;
+    }
+    .gray {
+      background: #909399;
+      color: #fff;
+    }
+    .success {
+      background: #67c23a;
+      color: #fff;
+    }
+
+    .prompt-item {
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 6px 0;
+      width: 100%;
+    }
+    .prompt-item.pinned-item {
+      background: #fff9e6;
+      border-left: 4px solid #f5a623;
+    }
+    .prompt-item.collected-item {
+      background: #e6f7ff;
+      border-left: 4px solid #1890ff;
+    }
+    .pin-btn {
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 14px;
+      margin-right: 4px;
+    }
+	.item-check {
+	  margin: 0;
+	  cursor: pointer;
+	}
+    .status-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .pinned-badge {
+      background: #f5a623;
+      color: #fff;
+    }
+    .collect-badge {
+      background: #1890ff;
+      color: #fff;
+    }
+.item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.item-head .title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.item-head .title-main {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;            /* ← 新增：允许 flex 子项收缩，否则 ellipsis 不生效 */
+}
+.item-head .title-meta {
+  white-space: nowrap;
+  flex-shrink: 0;          /* ← 新增：版本号和次数不允许被压缩 */
+  color: #666;
+  font-size: 12px;
+}
+.item-check {
+  margin: 0;
+  padding: 0;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.pin-btn {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.item-opt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+.item-opt .btn {
+  padding: 2px 5px;
+  font-size: 12px;
+}
+    .tag {
+      display: inline-block;
+      background: #ecf5ff;
+      padding: 2px 4px;
+      border-radius: 3px;
+      margin: 2px;
+    }
+    .empty-tip {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+    }
+    .cate-title {
+      font-weight: bold;
+      margin: 8px 0;
+      color: #333;
+    }
+    .manage-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px;
+      border-bottom: 1px solid #eee;
+      gap: 10px;
+    }
+    .cate-color-select {
+      width: 100px;
+      padding: 4px;
+      font-size: 12px;
+    }
+    .color-preview {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    #toolTip {
+      position: fixed;
+      background: #333;
+      color: #fff;
+      padding: 6px;
+      border-radius: 4px;
+      max-width: 240px;
+      display: none;
+      z-index: 999;
+    }
+    #previewTip {
+      position: fixed;
+      background: #333;
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.6;
+      max-width: 260px;
+      z-index: 10000;
+      display: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    #editModal, #logModal, #verModal, #funcModal, #backupModal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 6px;
+      margin: 4px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .tag-option {
+      padding: 4px 8px;
+      margin: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .tag-option.active {
+      background: #409eff;
+      color: #fff;
+      border-color: #409eff;
+    }
+    .form-label {
+      display: block;
+      font-weight: bold;
+      margin: 6px 0 2px;
+      color: #333;
+    }
+    .tag-add-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .ver-content {
+      line-height: 1.6;
+      font-size: 12px;
+      color: #333;
+    }
+    .ver-content h4 {
+      margin: 10px 0 4px;
+      color: #409eff;
+    }
+
+    .log-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+    }
+    .log-filter-btn {
+      padding: 4px 10px;
+      border: 1px solid #ccc;
+      border-radius: 16px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .log-filter-btn.active {
+      background: #409eff;
+      color: #fff;
+      border-color: #409eff;
+    }
+    .log-group {
+      margin-bottom: 16px;
+    }
+    .log-group-title {
+      font-weight: bold;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .log-group-title:hover {
+      color: #409eff;
+    }
+    .log-list {
+      margin-left: 16px;
+    }
+    .log-item {
+      padding: 6px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 12px;
+    }
+    .log-time {
+      color: #888;
+      font-size: 11px;
+      margin-right: 8px;
+    }
+    .log-type-icon {
+      display: inline-block;
+      width: 24px;
+      text-align: center;
+    }
+    .log-collapsed .log-list {
+      display: none;
+    }
+  </style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="left-nav">
+  <div style="padding:8px; border-bottom:1px solid #eee; background:#fafbfc; margin-bottom:16px;">
+    <button id="openInTabBtn" class="btn primary" style="width:100%;">🗔 全屏模式</button>
+  </div>
+  
+  <div class="nav-group" data-group="core">
+    <div class="group-title">📋 核心功能 <span class="arrow">▼</span></div>
+    <div class="group-buttons">
+      <button class="nav-btn active" data-page="promptList">📋 提示词列表</button>
+      <button class="nav-btn" data-page="collectList">⭐ 我的收藏</button>
+      <button class="nav-btn" data-page="draftList">📝 草稿箱</button>
+    </div>
+  </div>
+  <div class="nav-group" data-group="manage">
+    <div class="group-title">⚙️ 管理 <span class="arrow">▼</span></div>
+    <div class="group-buttons">
+      <button class="nav-btn" data-page="cateManage">📁 分类管理</button>
+      <button class="nav-btn" data-page="tagManage">🏷️ 标签管理</button>
+    </div>
+  </div>
+  <div class="nav-group" data-group="system">
+    <div class="group-title">📦 系统 <span class="arrow">▼</span></div>
+    <div class="group-buttons">
+      <button class="nav-btn ver" id="showVersionHistoryBtn">📜 版本历史</button>
+      <button class="nav-btn ver" id="showBackupBtn">💾 导入/导出</button>
+      <button class="nav-btn ver" id="showLogBtn">📋 操作日志</button>
+    </div>
+  </div>
+  <div class="nav-group" data-group="help">
+    <div class="group-title">❓ 帮助 <span class="arrow">▼</span></div>
+    <div class="group-buttons">
+      <button class="nav-btn ver" id="showFuncBtn">❓ 功能说明</button>
+      <button class="nav-btn ver" id="showVerBtn">🔄 版本更新</button>
+    </div>
+  </div>
+  
+  <div class="info-box">
+    <div class="info-row">
+      <div class="info-label">插件名称：</div>
+      <div class="info-value">我的提示词管理器</div>
+    </div>
+    <div class="info-row" style="margin:15px 0;"></div>
+    <div class="info-row">
+      <div class="info-label">作者：</div>
+      <div class="info-value author-text">董琪</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">当前版本：</div>
+      <div class="info-value version-text" id="infoVersion"></div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">更新日期：</div>
+      <div class="info-value date-text">2026-06-01</div>
+    </div>
+  </div>
+</div>
+
+<div class="right-content">
+  <div id="promptList" class="page show">
+    <!-- 第一行：搜索框 + 排序下拉 -->
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        🔍 <input type="text" id="searchInput" placeholder="搜索标题/内容/标签" style="width:140px;">
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        📅 <select id="sortSelect" style="min-width:160px;">
+          <option value="default">默认排序</option>
+          <option value="cate_oldest">分类内：最早修改在前</option>
+          <option value="cate_most_used">分类内：使用次数最多</option>
+          <option value="global_most_used">全局：使用次数最多</option>
+          <option value="global_pinned_first">全局：置顶优先</option>
+          <option value="global_collected_first">全局：收藏优先</option>
+          <option value="global_version_desc">全局：版本号降序</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 第二行：分类筛选 + 标签筛选 -->
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        📂 <select id="categoryFilter">
+          <option value="">全部分类</option>
+        </select>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        🏷️ <select id="tagFilter">
+          <option value="">全部标签</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 第三行：全选、批量删除、批量移动分类 -->
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        <button id="selectAll" class="btn">✅ 全选</button>
+        <button id="batchDel" class="btn danger">🗑️ 批量删除</button>
+      </div>
+      <div class="toolbar-divider"></div>
+      <div class="toolbar-group">
+        📂 <select id="batchMoveCate"></select>
+        <button id="batchMove" class="btn">批量移动分类</button>
+      </div>
+    </div>
+
+    <!-- 第四行：左侧新增/清空，右侧统计 -->
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        <button id="addPrompt" class="btn primary">➕ 新增提示词</button>
+        <button id="clearAiInput" class="btn warning">🧹 清空输入框</button>
+      </div>
+      <div style="flex:1; text-align:right; display:flex; justify-content:flex-end; gap:12px;">
+        <span>总数：<span id="count">0</span></span>
+        <span>置顶：<span id="pinnedCount">0</span></span>
+        <span>收藏：<span id="collectedCount">0</span></span>
+      </div>
+    </div>
+
+    <div id="listContainer"></div>
+  </div>
+
+  <div id="collectList" class="page"><div id="collectContainer"></div></div>
+  <div id="draftList" class="page"><div id="draftContainer"></div></div>
+
+  <div id="cateManage" class="page">
+    <div class="toolbar-row">
+      <input id="newCateInput" placeholder="输入新分类名称" style="flex:2;">
+      <select id="newCateColor" class="cate-color-select">
+        <option value="">默认白色</option>
+      </select>
+      <button id="addCateBtn" class="btn primary">添加分类</button>
+    </div>
+    <div id="cateContainer"></div>
+  </div>
+
+  <div id="tagManage" class="page">
+    <div class="toolbar-row">
+      <input id="newTagInput" placeholder="输入新标签名称">
+      <button id="addTagBtn" class="btn primary">添加标签</button>
+    </div>
+    <div id="tagContainer"></div>
+  </div>
+
+  <div id="editModal">
+    <div class="modal-box">
+      <h4>编辑提示词</h4>
+      <label class="form-label">标题</label><input type="text" id="promptTitle" placeholder="标题">
+      <label class="form-label">内容</label><textarea rows="5" id="promptContent" placeholder="提示词内容"></textarea>
+      <div>字数：<span id="charCount">0</span></div>
+      <label class="form-label">分类</label><select id="promptCate"></select>
+      <label class="form-label">标签</label><div id="tagSelector"></div>
+      <div class="tag-add-row"><input type="text" id="newTagInputEdit" placeholder="输入新标签"><button class="btn primary" id="addTagBtnEdit">添加</button></div>
+      <input type="hidden" id="promptTag">
+      <label class="form-label">备注信息</label><input type="text" id="promptRemark" placeholder="备注信息">
+      <label class="form-label">版本号</label><input type="text" id="promptVer" placeholder="版本号">
+      <label><input type="checkbox" id="promptPin">置顶</label>
+      <div style="margin-top:8px;"><button id="saveEdit" class="btn primary">保存正式</button><button id="saveDraft" class="btn warning">保存草稿</button><button id="closeEdit" class="btn gray">关闭</button></div>
+    </div>
+  </div>
+
+  <div id="logModal">
+    <div class="modal-box">
+      <h4>📋 操作日志</h4>
+      <div class="log-filter-bar" id="logFilterBar">
+        <button class="log-filter-btn active" data-filter="all">全部</button>
+        <button class="log-filter-btn" data-filter="add">➕ 新增</button>
+        <button class="log-filter-btn" data-filter="edit">✏️ 编辑</button>
+        <button class="log-filter-btn" data-filter="delete">🗑️ 删除</button>
+        <button class="log-filter-btn" data-filter="collect">⭐ 收藏</button>
+        <button class="log-filter-btn" data-filter="draft">📄 草稿</button>
+        <button class="log-filter-btn" data-filter="batch">📦 批量</button>
+        <button class="log-filter-btn" data-filter="external">🌐 外部操作</button>
+      </div>
+      <div id="logListContainer" style="max-height:400px; overflow-y:auto;"></div>
+      <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
+        <button id="clearAllLogsBtn" class="btn danger">清空所有日志</button>
+        <button id="closeLogBtn" class="btn gray">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="backupModal">
+    <div class="modal-box">
+      <h4>数据备份</h4>
+      <button id="exportData" class="btn primary" style="width:100%;margin:5px 0;">导出全部数据</button>
+      <label class="form-label">选择备份文件导入</label>
+      <input type="file" id="importFile" accept=".json" style="margin:8px 0;">
+      <div style="margin:8px 0;">
+        <label><input type="radio" name="logImportMode" value="append" checked> 追加日志</label>
+        <label style="margin-left:12px;"><input type="radio" name="logImportMode" value="replace"> 替换日志</label>
+      </div>
+      <button id="importDataBtn" class="btn primary" style="margin-top:4px;">确认导入</button>
+      <div style="margin-top:8px;"><button id="closeBackup" class="btn gray">关闭</button></div>
+    </div>
+  </div>
+
+  <div id="toolTip"></div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

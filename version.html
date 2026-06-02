@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>版本更新说明 - 我的提示词管理器</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.8;font-size:14px;color:#333;background:#fafbfc;}
+    h2{color:#409eff;border-bottom:2px solid #e8f4ff;padding-bottom:8px;}
+    h4{color:#666;margin-top:30px;font-size:15px;}
+    ul{padding-left:20px;}
+    li{margin:6px 0;}
+    .badge{display:inline-block;background:#409eff;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px;margin-right:6px;}
+    .date{color:#999;font-size:12px;margin-left:8px;}
+    .back{position:fixed;top:20px;right:20px;padding:8px 16px;background:#f0f2f5;border:none;border-radius:6px;cursor:pointer;font-size:13px;}
+    .back:hover{background:#e0e6f0;}
+    .new-badge{background:#f56c6c;color:white;font-size:11px;padding:2px 6px;border-radius:12px;margin-left:10px;vertical-align:middle;}
+    .nav-link {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+    .nav-link a {
+        color: #409eff;
+        text-decoration: none;
+        font-size: 13px;
+    }
+    .nav-link a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <button class="back" onclick="window.close()">关闭</button>
+  <h2>📋 版本更新说明</h2>
+  <p style="color:#409eff;font-weight:bold;">✅ 当前支持网站：Deepseek、豆包、Kimi</p>
+  <p style="color:#409eff;font-weight:bold;margin-top:20px;">
+  💡 本版本 12 项核心功能已通过 Puppeteer 自动化测试（v2.5，全部通过）。
+  </p>
+
+  <h4><span class="badge">V1.7.1</span><span class="date">2026-06-02</span> 弹窗稳定性修复版 <span class="new-badge">🆕 最新版本</span></h4>
+  <ul>
+    <li><strong>修复：Popup 幽灵滚动条</strong> — 动态适配浏览器实际视口高度，彻底消除弹窗边缘无法滚动的多余滚动条。 <span class="new-badge">🆕 NEW</span></li>
+    <li><strong>修复：Tooltip 显示异常</strong> — 修复词条悬停提示中多余符号（&lt;）的显示问题。 <span class="new-badge">🆕 NEW</span></li>
+    <li><strong>优化：Flex 布局稳定性</strong> — 移除 .page.show 中冗余的 height:100%，避免 flex 子项高度计算冲突，提升渲染稳定性。 <span class="new-badge">🆕 NEW</span></li>
+    <li><strong>优化：版本号动态同步</strong> — 底部信息区版本号改为动态读取 manifest.json，避免手动更新遗漏。 <span class="new-badge">🆕 NEW</span></li>
+  </ul>
+
+  <h4><span class="badge">V1.7</span><span class="date">2026-06-01</span> 浮动面板体验增强版 </h4>
+<ul>
+  <li><strong>新增：浮动面板排序切换</strong> — 可在“次数优先”和“置顶优先”之间切换排序方案。 <span class="new-badge">🆕 NEW</span></li>
+  <li><strong>新增：浮动面板搜索过滤</strong> — 实时根据标题或内容筛选词条。 <span class="new-badge">🆕 NEW</span></li>
+  <li><strong>新增：查看更多按钮</strong> — 初始显示8条，点击展开至20条。 <span class="new-badge">🆕 NEW</span></li>
+  <li><strong>新增：数据自动刷新提示</strong> — 管理器中数据变化时，面板自动刷新并显示“已更新”提示。 <span class="new-badge">🆕 NEW</span></li>
+  <li><strong>优化：卡片视觉</strong> — 增加微边框和阴影，提升辨识度。 <span class="new-badge">🆕 NEW</span></li>
+</ul>
+  
+  <h4><span class="badge">V1.6</span><span class="date">2026-05-31</span> 视觉增强与排序优化版 </h4>
+  <ul>
+    <li><strong>新增：分类背景色</strong> — 为每个分类设置背景色（15种预设颜色），普通词条自动应用分类背景色。 </li>
+    <li><strong>优化：置顶功能增强</strong> — 置顶词条主列表顶部显示，卡片浅黄背景+橙边，按钮图标切换（📌/📍）。 </li>
+    <li><strong>优化：收藏视觉区分</strong> — 收藏词条在主列表中显示浅蓝色背景+蓝边（非置顶时）。 </li>
+    <li><strong>新增：排序功能增强</strong> — 支持7种排序方式：默认排序（分类内最新修改）、分类内最早修改、分类内使用次数最多、全局使用次数最多、全局置顶优先、全局收藏优先、全局版本号降序。全局排序时隐藏分类标题，跨分类混排。 </li>
+    <li><strong>优化：工具栏布局调整</strong> — 采用四行布局：搜索+排序、分类+标签、批量操作、新增/清空+统计，界面更清晰。 </li>
+    <li><strong>修复：分类/标签管理页面的提示行和统计信息</strong> — 恢复鼠标悬停显示详细统计数据。 </li>
+  </ul>
+
+  <h4><span class="badge">V1.5</span><span class="date">2026-05-30</span> 操作日志与体验增强版</h4>
+  <ul>
+    <li><strong>新增：操作日志功能</strong> — 记录用户所有关键操作（新增/编辑/删除/收藏/草稿/批量/填入/复制/清空/导入导出等），每条日志包含时间、类型、标题、详情、来源等。</li>
+    <li><strong>新增：日志筛选与折叠</strong> — 按操作类型筛选（新增/编辑/删除/收藏/草稿/批量/外部操作），超过7天的日志自动折叠，点击可展开。</li>
+    <li><strong>增强：导入导出支持日志</strong> — 导出备份时包含所有操作日志；导入时提供“追加日志”或“替换日志”两种模式，灵活管理历史记录。</li>
+    <li><strong>新增：左侧导航“操作日志”按钮</strong> — 一键打开日志弹窗，实时查看操作历史。</li>
+    <li><strong>优化：所有用户操作均自动记录日志</strong> — 包括置顶切换、分类/标签增删、清空输入框、复制内容等，方便回溯。</li>
+    <li><strong>新增：左侧导航分组折叠</strong> — 支持折叠/展开分组，状态自动记忆。</li>
+    <li><strong>新增：分类/标签筛选</strong> — 提示词列表顶部增加分类筛选和标签筛选下拉框。</li>
+    <li><strong>新增：按钮悬停预览</strong> — 鼠标悬停在“功能说明”、“版本更新”按钮上可预览摘要。</li>
+    <li><strong>新增：在新标签页中打开管理器</strong> — 左侧导航栏顶部增加按钮，点击可在独立标签页中打开完整管理界面，获得更大操作空间。</li>
+    <li><strong>修复：左侧折叠/展开功能失效问题</strong> — 优化事件绑定，确保折叠展开正常。</li>
+  </ul>
+
+  <h4><span class="badge">V1.4</span><span class="date">2026-05-29</span> 智能高频同步版</h4>
+  <ul>
+    <li>新增：使用次数统计 — 每次“填入”增加使用次数，显示🔥标记</li>
+    <li>新增：浮动面板智能推荐（使用次数≥5的高频词条）</li>
+    <li>新增：浮动面板“清空”按钮</li>
+    <li>新增：双向数据实时同步（content.js ↔ popup.js）</li>
+    <li>优化：存储统一为 chrome.storage 主源，彻底解决数据覆盖</li>
+  </ul>
+
+  <h4><span class="badge">V1.3</span><span class="date">2026-05-29</span> 体验完善版</h4>
+  <ul>
+    <li>导入导出增强（文件名时间戳、文件选择器）</li>
+    <li>复选框 Tooltip、版本历史页面与主界面实时同步</li>
+    <li>修复编辑正式词条版本号递增、左侧导航栏按钮失效等问题</li>
+  </ul>
+
+  <h4><span class="badge">V1.2</span><span class="date">2026-05-29</span> 功能完善版</h4>
+  <ul>
+    <li>新增版本历史独立页面（时间轴卡片式，支持恢复任意旧版本）</li>
+    <li>修复导航按钮、收藏夹/草稿箱按钮失效等问题</li>
+  </ul>
+
+  <h4><span class="badge">V1.1</span><span class="date">2026-05-28</span> 性能优化版</h4>
+  <ul>
+    <li>页面懒加载缓存、Tooltip 延迟显示、脏标记刷新机制</li>
+  </ul>
+
+  <h4><span class="badge">V1.0</span><span class="date">2026-05-25</span> 功能完整版</h4>
+  <ul>
+    <li>网页内浮动快捷面板（Alt+1），数据双保险（localStorage+chrome.storage）</li>
+    <li>快捷键 Ctrl+Shift+L 唤起管理器，JSON 导入导出备份</li>
+  </ul>
+
+  <h4><span class="badge">V0.3</span><span class="date">2026-05-25</span> 界面优化版</h4>
+  <ul>
+    <li>修复界面布局（无滚动条、无空白），编辑页增加字段标题</li>
+    <li>标签点击切换选中/取消、编辑页直接新增标签、字数实时统计</li>
+  </ul>
+
+  <h4><span class="badge">V0.2</span><span class="date">2026-05-25</span> 状态扩展版</h4>
+  <ul>
+    <li>新增收藏、草稿箱、分类/标签管理、批量操作、置顶、一键填入/复制/清空</li>
+  </ul>
+
+  <h4><span class="badge">V0.1</span><span class="date">2026-05-25</span> 初始基础版</h4>
+  <ul>
+    <li>基础提示词增删改、本地存储、分类展示</li>
+  </ul>
+
+  <div class="nav-link">
+    <a href="guide.html">📘 查看功能说明 →</a>
+  </div>
+</body>
+</html>

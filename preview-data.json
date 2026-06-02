@@ -1,0 +1,4 @@
+{
+  "funcPreview": "✅ 提示词管理：新增、编辑、删除、本地永久存储<br>✅ 分类/标签管理：支持自定义分类、多标签点选（编辑页直接切换选中状态）<<br>✅ 三大状态：正式列表、收藏夹、草稿箱自由切换，草稿与正式词条可互转<br><span style='font-size:11px;color:#aaa;'>点击查看完整说明 →</span>",
+  "verPreview": "🔄 V1.7.1 🆕 NEW<br>• <strong>修复：Popup 幽灵滚动条</strong> — 动态适配视口高度，彻底消除多余滚动条 🆕<<br>• <strong>修复：Tooltip 显示异常</strong> — 修复悬停提示多余符号问题 🆕<<br>• <strong>优化：Flex 布局稳定性</strong> — 移除冗余 height:100%，避免渲染冲突 🆕<<br>• <strong>优化：版本号动态同步</strong> — 底部信息区自动读取 manifest.json 🆕<<br><span style='font-size:11px;color:#aaa;'>点击查看完整日志 →</span>"
+}
