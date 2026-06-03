@@ -39,11 +39,11 @@
 
 **点击浏览器插件栏图标，唤起提示词管理器主界面：**
 
-![点击浏览器插件栏图标即唤起该页面](https://github.com/loverworm/MyPrompt/blob/main/%E7%82%B9%E5%87%BB%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%A0%8F%E5%9B%BE%E6%A0%87%E5%8D%B3%E5%94%A4%E8%B5%B7%E8%AF%A5%E9%A1%B5%E9%9D%A2.png?raw=true)
+&lt;img src="https://github.com/loverworm/MyPrompt/blob/main/%E7%82%B9%E5%87%BB%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%A0%8F%E5%9B%BE%E6%A0%87%E5%8D%B3%E5%94%A4%E8%B5%B7%E8%AF%A5%E9%A1%B5%E9%9D%A2.png?raw=true" width="600" alt="点击浏览器插件栏图标即唤起该页面"&gt;
 
 **在 AI 网页中按 `Alt+1` 唤出浮动面板，点击「填入」将提示词注入输入框：**
 
-![监听 Alt+1 唤出浮动面板，点击填入将词条内容注入当前 AI 网页的输入框](https://github.com/loverworm/MyPrompt/blob/main/%E7%9B%91%E5%90%AC%20Alt+1%20%E5%94%A4%E5%87%BA%E6%B5%AE%E5%8A%A8%E9%9D%A2%E6%9D%BF%EF%BC%8C%E7%82%B9%E5%87%BB%E5%A1%AB%E5%85%A5%E5%B0%86%E8%AF%8D%E6%9D%A1%E5%86%85%E5%AE%B9%E6%B3%A8%E5%85%A5%E5%BD%93%E5%89%8D%20AI%20%E7%BD%91%E9%A1%B5%E7%9A%84%E8%BE%93%E5%85%A5%E6%A1%86.png?raw=true)
+&lt;img src="https://github.com/loverworm/MyPrompt/blob/main/%E7%9B%91%E5%90%AC%20Alt+1%20%E5%94%A4%E5%87%BA%E6%B5%AE%E5%8A%A8%E9%9D%A2%E6%9D%BF%EF%BC%8C%E7%82%B9%E5%87%BB%E5%A1%AB%E5%85%A5%E5%B0%86%E8%AF%8D%E6%9D%A1%E5%86%85%E5%AE%B9%E6%B3%A8%E5%85%A5%E5%BD%93%E5%89%8D%20AI%20%E7%BD%91%E9%A1%B5%E7%9A%84%E8%BE%93%E5%85%A5%E6%A1%86.png?raw=true" width="600" alt="监听 Alt+1 唤出浮动面板，点击填入将词条内容注入当前 AI 网页的输入框"&gt;
 
 ---
   
