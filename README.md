@@ -39,7 +39,7 @@
 
 **点击浏览器插件栏图标，唤起提示词管理器主界面：**
 
-![点击浏览器插件栏图标即唤起该页面](https://github.com/loverworm/MyPrompt/blob/main/%E7%82%B9%E5%87%BB%E6%B5%8F%E8%A7%A7%E5%99%A8%E6%8F%92%E4%BB%B6%E6%A0%8F%E5%9B%BE%E6%A0%87%E5%8D%B3%E5%94%A4%E8%B5%B7%E8%AF%A5%E9%A1%B5%E9%9D%A2.png?raw=true)
+![点击浏览器插件栏图标即唤起该页面](https://github.com/loverworm/MyPrompt/blob/main/%E7%82%B9%E5%87%BB%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8F%92%E4%BB%B6%E6%A0%8F%E5%9B%BE%E6%A0%87%E5%8D%B3%E5%94%A4%E8%B5%B7%E8%AF%A5%E9%A1%B5%E9%9D%A2.png?raw=true)
 
 **在 AI 网页中按 `Alt+1` 唤出浮动面板，点击「填入」将提示词注入输入框：**
 
