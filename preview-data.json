@@ -1,4 +1,4 @@
 {
-  "funcPreview": "✅ 提示词管理：新增、编辑、删除、本地永久存储<br>✅ 分类/标签管理：支持自定义分类、多标签点选（编辑页直接切换选中状态）<<br>✅ 三大状态：正式列表、收藏夹、草稿箱自由切换，草稿与正式词条可互转<br><span style='font-size:11px;color:#aaa;'>点击查看完整说明 →</span>",
-  "verPreview": "🔄 V1.7.1 🆕 NEW<br>• <strong>修复：Popup 幽灵滚动条</strong> — 动态适配视口高度，彻底消除多余滚动条 🆕<<br>• <strong>修复：Tooltip 显示异常</strong> — 修复悬停提示多余符号问题 🆕<<br>• <strong>优化：Flex 布局稳定性</strong> — 移除冗余 height:100%，避免渲染冲突 🆕<<br>• <strong>优化：版本号动态同步</strong> — 底部信息区自动读取 manifest.json 🆕<<br><span style='font-size:11px;color:#aaa;'>点击查看完整日志 →</span>"
+  "funcPreview": "✅ 第一行：搜索框 + 排序下拉框（支持7种排序方式，见下文）<br>✅ 第二行：分类筛选 + 标签筛选<br>✅ 第三行：全选、批量删除、批量移动分类（含下拉框和按钮）<br><span style=\"font-size:11px;color:#aaa;\">点击查看完整说明 →</span>",
+  "verPreview": "🔄 V1.7.2 🆕 NEW<br>• 修复：转草稿时正确标记草稿状态 — 正式词条转为草稿时，自动设置 isDraft: true，消除草稿箱中状态不一致的隐患。<br>• 修复：主界面统计口径统一 — 筛选分类或标签后，置顶数与收藏数同步跟随当前视图更新，避免数字对不上。<br>• 修复：浮动面板标签优先级对齐 — 同时置顶+收藏的词条，面板内优先显示\"📍 置顶\"，与主列表视觉优先级一致。<br>• 优化：草稿箱填入不计次数 — 明确草稿词条的填入行为不累计使用次数，避免半成品草稿干扰高频词条统计。<br><span style=\"font-size:11px;color:#aaa;\">点击查看完整日志 →</span>"
 }

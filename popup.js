@@ -1,3 +1,7 @@
+const APP_META = {
+    updateDate: '2026-06-05'
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     let promptList = [];
     let draftList = [];
@@ -849,13 +853,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const countSpan = document.getElementById('count');
         const pinnedCountSpan = document.getElementById('pinnedCount');
         const collectedCountSpan = document.getElementById('collectedCount');
-        if (countSpan) countSpan.innerText = list.length;
-        
-        const allActive = promptList.filter(p => p.enable !== false && !p.isDraft);
-        const pinnedTotal = allActive.filter(p => p.pinned === true).length;
-        const collectedTotal = allActive.filter(p => p.collect === true).length;
-        if (pinnedCountSpan) pinnedCountSpan.innerText = pinnedTotal;
-        if (collectedCountSpan) collectedCountSpan.innerText = collectedTotal;
+		if (countSpan) countSpan.innerText = list.length;
+
+		const pinnedTotal = list.filter(p => p.pinned === true).length;
+		const collectedTotal = list.filter(p => p.collect === true).length;
+		if (pinnedCountSpan) pinnedCountSpan.innerText = pinnedTotal;
+		if (collectedCountSpan) collectedCountSpan.innerText = collectedTotal;
         
         bindPromptEvent();
     }
@@ -986,7 +989,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 let id = btn.closest('.prompt-item').dataset.id;
                 let idx = promptList.findIndex(x => x.id === id);
                 if (idx === -1) return;
-                draftList.push(promptList[idx]);
+                draftList.push({ ...promptList[idx], isDraft: true });
                 addLog('draft', promptList[idx].title, '正式词条转为草稿', 'formal');
                 promptList.splice(idx, 1);
                 setStorage('myPromptList', promptList);
@@ -1050,7 +1053,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 let item = promptList.find(x => x.id === id);
                 if (item) {
                     insertTextToPage(item.content);
-                    incrementUseCount(id);
+					incrementUseCount(id);
                     getCurrentSiteDomain(domain => {
                         addLog('use', item.title, `填入到 ${domain || '当前页面'}`, 'collect', domain);
                     });
@@ -1131,7 +1134,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 let item = draftList.find(x => x.id === id);
                 if (item) {
                     insertTextToPage(item.content);
-                    incrementUseCount(id);
+					// 草稿箱词条填入时不累计使用次数，避免半成品草稿干扰高频词条统计
+					// incrementUseCount(id);
                     getCurrentSiteDomain(domain => {
                         addLog('use', item.title, `填入到 ${domain || '当前页面'}`, 'draft', domain);
                     });
@@ -1789,11 +1793,15 @@ document.addEventListener('DOMContentLoaded', function () {
     refreshFilterDropdowns();
     reloadDataFromStorage().then(() => {
         renderPromptList();
-        // 动态同步 manifest 版本号到 popup.html 底部信息区
+        // 动态同步 manifest 版本号与日期到底部信息区
         const manifest = chrome.runtime.getManifest();
         const infoVersionEl = document.getElementById('infoVersion');
+        const infoDateEl = document.getElementById('infoDate');
         if (infoVersionEl && manifest && manifest.version) {
             infoVersionEl.textContent = 'V' + manifest.version;
+        }
+        if (infoDateEl) {
+            infoDateEl.textContent = APP_META.updateDate;
         }
         pageState.promptList.rendered = true;
         pageState.promptList.dirty = false;

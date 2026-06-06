@@ -296,8 +296,8 @@
       const useCountText = (p.useCount && p.useCount > 0) ? `📊 使用次数：${p.useCount}` : '';
       
       let sourceText = '';
-      if (p.collect) sourceText = '⭐ 收藏';
-      else if (p.pinned) sourceText = '📍 置顶';
+      if (p.pinned) sourceText = '📍 置顶';
+      else if (p.collect) sourceText = '⭐ 收藏';
       else if ((p.useCount || 0) >= 5) sourceText = '🔥 高频';
       
       item.innerHTML = `

@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-06-05_04-14-46",
+  "snapshotDir": ".sync-baseline/2026-06-05_04-14-46",
+  "baselineVersion": "1.7.2",
+  "baselineDate": "2026-06-04T20:14:46.882Z",
+  "files": {
+    "manifest.json": {
+      "md5": "750e1d4f93b3d623166ffe092d85711c",
+      "size": 848,
+      "mtime": "2026-06-04T18:53:31.871Z"
+    },
+    "popup.js": {
+      "md5": "6c5ae053392b2241389e09208dd0aaf2",
+      "size": 86811,
+      "mtime": "2026-06-04T18:53:08.737Z"
+    },
+    "popup.html": {
+      "md5": "e79f88acd78832dd9db9b97d4426de65",
+      "size": 21929,
+      "mtime": "2026-06-04T18:58:16.940Z"
+    },
+    "content.js": {
+      "md5": "0e5f911fd7fd7c9e8aa69642c235ec95",
+      "size": 17410,
+      "mtime": "2026-06-04T15:13:39.866Z"
+    },
+    "guide.html": {
+      "md5": "6a505c921296e2ed044530b7d15e34ce",
+      "size": 19978,
+      "mtime": "2026-06-04T19:42:58.753Z"
+    },
+    "guide.js": {
+      "md5": "b9976632237397e9f4124c8b01c08302",
+      "size": 4982,
+      "mtime": "2026-05-30T07:36:04.651Z"
+    },
+    "version.html": {
+      "md5": "ec5e0ff7a754c3a646d225de772d3de0",
+      "size": 10005,
+      "mtime": "2026-06-04T19:23:52.931Z"
+    },
+    "version-history.html": {
+      "md5": "5c2dd6089a389099ff98fd2d8b0ab2be",
+      "size": 3808,
+      "mtime": "2026-05-28T22:10:57.210Z"
+    },
+    "version-history.js": {
+      "md5": "73088a881a7bc81efd091ee86309972b",
+      "size": 7982,
+      "mtime": "2026-06-01T11:53:45.961Z"
+    },
+    "preview-data.json": {
+      "md5": "544232cd3a1ea7d15ec12266dc73be36",
+      "size": 1077,
+      "mtime": "2026-06-04T18:29:47.194Z"
+    },
+    "README.md": {
+      "md5": "eb209eea1925e968f71232cbc6ebab6e",
+      "size": 14174,
+      "mtime": "2026-06-04T19:24:48.849Z"
+    }
+  }
+}

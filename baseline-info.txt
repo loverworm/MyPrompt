@@ -1,0 +1,54 @@
+========================================
+基线文件夹: 2026-06-05_04-14-46
+插件版本: 1.7.2
+创建时间: 2026-06-04T20:14:46.883Z
+========================================
+
+【创建目的】
+本次创建基线是为了建立代码快照，用于后续与 AI 进行增量差异比对。
+基线记录了当前全部追踪文件的 MD5 哈希值，确保 AI 在下次同步时能够
+精确识别"本次变更"与"历史已确认功能"，避免重复翻旧账。
+
+【追踪文件清单】
+manifest.json
+popup.js
+popup.html
+content.js
+guide.html
+guide.js
+version.html
+version-history.html
+version-history.js
+preview-data.json
+README.md
+
+【关键步骤】
+1. 创建时间戳子目录: .sync-baseline\2026-06-05_04-14-46
+2. 复制 11 个当前代码文件到本子目录作为物理快照
+3. 计算每个文件的 MD5 哈希值
+4. 生成根目录下的 sync-baseline.json（AI 比对所需）
+5. 复制基线文件副本到本子目录内（双重保险）
+6. 记录本日志到 .sync-baseline\2026-06-05_04-14-46\baseline-info.txt
+
+【使用方式】
+1. 每次代码修改后，重新运行 check-baseline.bat（或 node check-baseline.js）
+2. 脚本会自动生成新的时间戳子目录，保留历史版本不丢失
+3. 执行 AI 同步指令前，将根目录下的 sync-baseline.json 与当前代码文件一并上传
+4. AI 读取 sync-baseline.json 中的 MD5 记录，与当前代码比对，仅分析差异文件
+
+【注意事项】
+• 严禁手动修改 sync-baseline.json 中的 MD5 值，否则会导致比对失效
+• 不要删除 .sync-baseline/ 目录，除非您确认不再需要历史快照
+• 若根目录基线文件意外丢失，可从 .sync-baseline\2026-06-05_04-14-46/sync-baseline.json 找回副本
+• 每次上传给 AI 时，务必使用最新生成的根目录 sync-baseline.json，不要混用旧版基线
+• 历史快照子目录（如 2026-06-05_04-14-46/）仅用于本地留底和追溯，无需上传给 AI
+• 如需全量重新追溯历史遗漏，请手动删除根目录 sync-baseline.json 和 .sync-baseline/ 后重新执行
+
+【本次文件摘要】
+版本: 1.7.2
+时间: 2026-06-05_04-14-46
+成功复制: 11 个文件
+缺失跳过: 0 个文件
+快照位置: .sync-baseline\2026-06-05_04-14-46
+基线副本: .sync-baseline\2026-06-05_04-14-46\sync-baseline.json
+
